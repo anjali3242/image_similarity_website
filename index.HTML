@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Similarity Checker</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(to right, #1e3c72, #2a5298);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .card {
+            padding: 30px;
+            border-radius: 15px;
+            background-color: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+        h1 {
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 30px;
+            color: #fff;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+        }
+        .btn-primary {
+            width: 100%;
+        }
+        .results {
+            margin-top: 20px;
+        }
+        .error {
+            color: red;
+            font-weight: 600;
+            text-align: center;
+        }
+        .image-preview {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 15px;
+        }
+        .image-preview img {
+            max-width: 45%;
+            border-radius: 10px;
+            border: 2px solid #ccc;
+        }
+        .list-group-item {
+            font-weight: 500;
+        }
+        small {
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h1>Image Similarity Checker</h1>
+            <div class="card">
+                <form id="imageForm" action="/upload" method="post" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="image1" class="form-label">Upload Image 1</label>
+                        <input class="form-control" type="file" id="image1" name="image1" accept="image/*" required onchange="previewImages()">
+                    </div>
+                    <div class="mb-3">
+                        <label for="image2" class="form-label">Upload Image 2</label>
+                        <input class="form-control" type="file" id="image2" name="image2" accept="image/*" required onchange="previewImages()">
+                    </div>
+
+                    <div class="image-preview" id="imagePreview">
+                        <!-- Previews will appear here -->
+                    </div>
+
+                    <button type="submit" class="btn btn-primary mt-3">Compute Similarity</button>
+                </form>
+
+                {% if error %}
+                    <div class="results error mt-3">
+                        Error: {{ error }}
+                    </div>
+                {% endif %}
+
+                {% if clip_score %}
+                    <div class="results mt-3">
+                        <h5>Results:</h5>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                CLIP Similarity: <strong>{{ clip_score }}%</strong><br>
+                                <small class="text-muted">
+                                    CLIP measures how <strong>semantically similar</strong> the images are. Higher value → images have similar content or meaning.
+                                </small>
+                            </li>
+                            <li class="list-group-item">
+                                MSE (Mean Squared Error): <strong>{{ mse_score }}</strong><br>
+                                <small class="text-muted">
+                                    MSE measures <strong>pixel-level differences</strong>. Lower value → images are more similar in color and intensity.
+                                </small>
+                            </li>
+                            <li class="list-group-item">
+                                SSIM (Structural Similarity): <strong>{{ ssim_score }}%</strong><br>
+                                <small class="text-muted">
+                                    SSIM measures <strong>structural similarity</strong>. Higher value → images have similar patterns and structures.
+                                </small>
+                            </li>
+                        </ul>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript to preview images -->
+<script>
+function previewImages() {
+    const preview = document.getElementById('imagePreview');
+    preview.innerHTML = ''; // clear previous previews
+
+
+    const image1 = document.getElementById('image1').files[0];
+    const image2 = document.getElementById('image2').files[0];
+
+    if (image1) {
+        const img1 = document.createElement('img');
+        img1.src = URL.createObjectURL(image1);
+        preview.appendChild(img1);
+    }
+    if (image2) {
+        const img2 = document.createElement('img');
+        img2.src = URL.createObjectURL(image2);
+        preview.appendChild(img2);
+    }
+}
+</script>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
