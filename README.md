@@ -23,7 +23,8 @@ The app provides an **interactive web interface** with image previews, result ex
 
 ## **Demo Screenshot**
 
-![Demo Screenshot](demo_screenshot.png)  
+![Demo Screenshot](demo_screenshot.png)(http://127.0.0.1:8000/upload)
+
 *(Add a screenshot of your app here)*
 
 ---
