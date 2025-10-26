@@ -21,9 +21,7 @@ The app provides an **interactive web interface** with image previews, result ex
 
 ---
 
-## **Demo Screenshot**
 
-![Demo Screenshot](Screenshot 2025-10-26 213154.png)
 
 
 
